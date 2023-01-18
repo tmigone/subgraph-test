@@ -2,12 +2,35 @@ specVersion: 0.0.5
 schema:
   file: ./schema.graphql
 dataSources:
+  # - kind: ethereum
+  #   name: Outbox
+  #   network: mainnet
+  #   source:
+  #     address: "0x0b9857ae2d4a3dbe74ffe1d7df045bb7f96e4840"
+  #     abi: Outbox
+  #     startBlock: 16404000
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.7
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - AdminChanged
+  #       - BeaconUpgraded
+  #       - Upgraded
+  #     abis:
+  #       - name: Outbox
+  #         file: ./abis/Outbox.json
+  #     eventHandlers:
+  #       - event: OutBoxTransactionExecuted(indexed address,indexed address,indexed uint256,uint256)
+  #         handler: handleOutBoxTransactionExecuted
+  #         receipt: true
+  #     file: ./src/outbox.ts
   - kind: ethereum
-    name: Outbox
+    name: L1GraphTokenGateway
     network: mainnet
     source:
-      address: "0x0b9857ae2d4a3dbe74ffe1d7df045bb7f96e4840"
-      abi: Outbox
+      address: "0x01cdc91b0a9ba741903aa3699bf4ce31d6c5cc06"
+      abi: L1GraphTokenGateway
       startBlock: 16404000
     mapping:
       kind: ethereum/events
@@ -18,10 +41,10 @@ dataSources:
         - BeaconUpgraded
         - Upgraded
       abis:
-        - name: Outbox
-          file: ./abis/Outbox.json
+        - name: L1GraphTokenGateway
+          file: ./abis/L1GraphTokenGateway.json
       eventHandlers:
-        - event: OutBoxTransactionExecuted(indexed address,indexed address,indexed uint256,uint256)
-          handler: handleOutBoxTransactionExecuted
+        - event: WithdrawalFinalized(address,indexed address,indexed address,indexed uint256,uint256)
+          handler: handleWithdrawalFinalized
           receipt: true
-      file: ./src/outbox.ts
+      file: ./src/l1Gateway.ts
