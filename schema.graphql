@@ -1,24 +1,16 @@
-type AdminChanged @entity(immutable: true) {
-  id: Bytes!
-  previousAdmin: Bytes! # address
-  newAdmin: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
+type BridgeWithdrawalTransaction @entity {
+  id: ID!
+  blockNumber: Int
+  timestamp: Int
+  signer: Bytes
 
-type BeaconUpgraded @entity(immutable: true) {
-  id: Bytes!
-  beacon: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
+  txHash: Bytes
+  from: Bytes
+  to: Bytes
+  transactionIndex: BigInt
 
-type Upgraded @entity(immutable: true) {
-  id: Bytes!
-  implementation: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+  exitNum: Int
+  amount: BigInt
+  l1Token: Bytes
+  datas: Bytes
 }
