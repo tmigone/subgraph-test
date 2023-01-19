@@ -8,9 +8,16 @@ type BridgeWithdrawalTransaction @entity {
   from: Bytes
   to: Bytes
   transactionIndex: BigInt
+  transactionIndexEvent: BigInt
+  transactionIndexCallData: BigInt
 
   exitNum: Int
   amount: BigInt
   l1Token: Bytes
   datas: Bytes
+  input: Bytes
+
+  first: Bytes
+  second: Int
+  third: Bytes
 }

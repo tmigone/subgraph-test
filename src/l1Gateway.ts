@@ -6,7 +6,10 @@ import {
   Bytes,
   BigInt,
   log,
+  crypto,
+  ethereum,
 } from "@graphprotocol/graph-ts";
+import { getTransactionIndex, getTransactionIndexFromCalldata, getTransactionIndexFromLogs } from "./bridgeHelpers";
 
 export function handleWithdrawalFinalized(event: WithdrawalFinalized): void {
   let entity = new BridgeWithdrawalTransaction(
@@ -23,46 +26,11 @@ export function handleWithdrawalFinalized(event: WithdrawalFinalized): void {
   entity.exitNum = event.params.exitNum.toI32();
   entity.amount = event.params.amount;
   entity.l1Token = event.params.l1Token;
+  entity.input = event.transaction.input;
 
-  // Loop through the receipt logs to find the OutBoxTransactionExecuted event on the same tx
-  // This event is emited by Arbitrum's Outbox contract and contains the withdrawal transactionIndex
-  let receipt = event.receipt;
-  let eventFound = false;
-  if (receipt && receipt.logs.length > 0) {
-    let logs = receipt.logs;
-
-    for (let i = 0; i < logs.length; i++) {
-      let topics = logs[i].topics;
-
-      // OutBoxTransactionExecuted event
-      if (isOutBoxTransactionExecutedEvent(topics[0])) {
-        eventFound = true;
-
-        // Parse event data to get the transactionIndex
-        let data = logs[i].data;
-        if (data.length === 32) {
-          let hexStringData = strip0xPrefix(data.toHexString());
-
-          let amountBytes = Bytes.fromHexString(hexStringData);
-          entity.transactionIndex = BigInt.fromUnsignedBytes(
-            amountBytes.reverse() as Bytes
-          );
-        } else {
-          log.error("Invalid data length", [
-            data.length.toString(),
-            data.toHexString(),
-          ]);
-        }
-      }
-    }
-  } else {
-    log.error("Could not find transaction receipt!", []);
-  }
-
-  if (!eventFound) {
-    log.error("Could not find WithdrawalFinalized event!", []);
-  }
-
+  entity.transactionIndexCallData = getTransactionIndexFromCalldata(event);
+  entity.transactionIndexEvent = getTransactionIndexFromLogs(event);
+  entity.transactionIndex = getTransactionIndex(event);
   entity.save();
 }
 
@@ -70,9 +38,3 @@ function strip0xPrefix(input: string): string {
   return input.startsWith("0x") ? input.slice(2) : input;
 }
 
-function isOutBoxTransactionExecutedEvent(topic: Bytes): boolean {
-  return (
-    topic.toHexString() ==
-    "0x20af7f3bbfe38132b8900ae295cd9c8d1914be7052d061a511f3f728dab18964"
-  );
-}
