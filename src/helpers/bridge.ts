@@ -1,8 +1,7 @@
-import { Bytes, BigInt, ethereum, log, crypto } from "@graphprotocol/graph-ts";
+import { Bytes, BigInt, ethereum, log, crypto, ByteArray } from "@graphprotocol/graph-ts";
+import { strip0xPrefix } from "./byte";
+import { RLPEncodeArray } from "./rlp";
 
-function strip0xPrefix(input: string): string {
-  return input.startsWith("0x") ? input.slice(2) : input;
-}
 
 // Gets transactionIndex
 // Returns null if the withdrawal call is made under the following conditions:
@@ -103,3 +102,14 @@ function isOutBoxTransactionExecutedEvent(topic: Bytes): boolean {
     )
   );
 }
+
+// See https://github.com/OffchainLabs/arbitrum-sdk/blob/1d69e5f03f537ef9af7aaa039a28a00cf61b2fc0/src/lib/message/L1ToL2Message.ts#L115-L161
+export function calculateSubmitRetryableId(input: ByteArray[]): string {
+  // arbitrum submit retry transactions have type 0x69
+  const txType = Bytes.fromHexString("0x69");
+  const encodedFields = Bytes.fromHexString(RLPEncodeArray(input));
+  const rlpEnc = txType.concat(encodedFields);
+
+  return crypto.keccak256(rlpEnc).toHexString();
+}
+

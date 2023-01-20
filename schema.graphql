@@ -20,4 +20,6 @@ type BridgeWithdrawalTransaction @entity {
   first: Bytes
   second: Int
   third: Bytes
+
+  extra: Bytes
 }

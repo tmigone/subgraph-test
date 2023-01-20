@@ -9,7 +9,11 @@ import {
   crypto,
   ethereum,
 } from "@graphprotocol/graph-ts";
-import { getTransactionIndex, getTransactionIndexFromCalldata, getTransactionIndexFromLogs } from "./bridgeHelpers";
+import {
+  getTransactionIndex,
+  getTransactionIndexFromCalldata,
+  getTransactionIndexFromLogs,
+} from "./helpers/bridge";
 
 export function handleWithdrawalFinalized(event: WithdrawalFinalized): void {
   let entity = new BridgeWithdrawalTransaction(
@@ -31,10 +35,9 @@ export function handleWithdrawalFinalized(event: WithdrawalFinalized): void {
   entity.transactionIndexCallData = getTransactionIndexFromCalldata(event);
   entity.transactionIndexEvent = getTransactionIndexFromLogs(event);
   entity.transactionIndex = getTransactionIndex(event);
-  entity.save();
-}
 
-function strip0xPrefix(input: string): string {
-  return input.startsWith("0x") ? input.slice(2) : input;
+  entity.extra = ethereum.encode(ethereum.Value.fromString("0x1234"));
+
+  entity.save();
 }
 
