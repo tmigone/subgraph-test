@@ -7,7 +7,7 @@ import {
   ByteArray,
 } from "@graphprotocol/graph-ts";
 import { DepositInitiated } from "../../generated/L1GraphTokenGateway/L1GraphTokenGateway";
-import { bigIntToBytes, padZeros, strip0xPrefix } from "./byte";
+import { bigIntToBytes, ensureEvenLength, padZeros, strip0xPrefix } from "./byte";
 import { RLPEncodeArray } from "./rlp";
 import { getOutBoxTransactionExecutedData } from "./events/OutBoxTransactionExecuted";
 import { getMessageDeliveredData } from "./events/MessageDelivered";

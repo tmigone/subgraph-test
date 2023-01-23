@@ -1,4 +1,5 @@
 import { log, BigInt, Bytes, ethereum, Address } from "@graphprotocol/graph-ts";
+import { ensureEvenLength } from "../byte";
 import { getDataFromEventLog } from "../event-log";
 
 // AS compiler doesn't like interfaces
@@ -34,12 +35,12 @@ export function parseInboxMessageDeliveredData(data: Bytes): InboxMessageDeliver
   if (decoded !== null) {
     let decodedTuple = decoded.toTuple();
     return {
-      to: Bytes.fromHexString(decodedTuple[2].toBigInt().toHexString()),
+      to: Bytes.fromHexString(ensureEvenLength(decodedTuple[2].toBigInt().toHexString())),
       l2CallValue: decodedTuple[3].toBigInt(),
       l1CallValue: decodedTuple[4].toBigInt(),
       maxSubmissionCost: decodedTuple[5].toBigInt(),
-      excessFeeRefundAddress: Bytes.fromHexString(decodedTuple[6].toBigInt().toHexString()),
-      callValueRefundAddress: Bytes.fromHexString(decodedTuple[7].toBigInt().toHexString()),
+      excessFeeRefundAddress: Bytes.fromHexString(ensureEvenLength(decodedTuple[6].toBigInt().toHexString())),
+      callValueRefundAddress: Bytes.fromHexString(ensureEvenLength(decodedTuple[7].toBigInt().toHexString())),
       gasLimit: decodedTuple[8].toBigInt(),
       maxFeePerGas: decodedTuple[9].toBigInt(),
       dataLength: decodedTuple[10].toBigInt(),

@@ -22,6 +22,11 @@ export function strip0xPrefix(input: string): string {
 
 // Pads a hex string with zeros to 64 characters
 export function padZeros(input: string): string {
-  let data = strip0xPrefix(input)
-  return '0x'.concat(data.padStart(64, '0'))
+  let data = strip0xPrefix(input);
+  return "0x".concat(data.padStart(64, "0"));
+}
+
+export function ensureEvenLength(input: string): string {
+  if (input.length % 2 == 0) return input
+  return "0x0".concat(strip0xPrefix(input.toString()));
 }

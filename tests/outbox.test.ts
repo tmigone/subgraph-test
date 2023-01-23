@@ -16,7 +16,12 @@ import {
   ByteArray,
 } from "@graphprotocol/graph-ts";
 import { calculateSubmitRetryableId } from "../src/helpers/bridge";
-import { bigIntToBytes, strip0xPrefix, stripZeros } from "../src/helpers/byte";
+import {
+  bigIntToBytes,
+  ensureEvenLength,
+  strip0xPrefix,
+  stripZeros,
+} from "../src/helpers/byte";
 import { parseMessageDeliveredData } from "../src/helpers/events/MessageDelivered";
 import { getTxToL2Data, parseTxToL2Data } from "../src/helpers/events/TxToL2";
 
@@ -120,11 +125,14 @@ describe("Describe entity assertions", () => {
     let mdd = Bytes.fromHexString(
       "0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000e42e567b36000000000000000000000000c944e90c64b2c07662a292be6244bdf05cda44a7000000000000000000000000ba321653bdb2525c866d962ad66be358f6718d780000000000000000000000001b07d3344188908fb6deceac381f3ee63c48477a000000000000000000000000000000000000000000000033b768d97dcaa8000000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000d36269bef500003f8f21191b3f7c5982dc87f80300000000000000000000000000000000000000000000000000000000"
     );
-    let res = parseTxToL2Data(mdd)
+    let res = parseTxToL2Data(mdd);
     if (res !== null) {
       log.error(`DATA: ${res.toHexString()}`, []);
     }
 
+    let odd = "0x36e1cea9772e2584e0a1d4c11abea2aeb9b188c";
+    log.info(odd, []);
+    log.info(ensureEvenLength(odd), []);
   });
 });
 
