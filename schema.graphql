@@ -8,18 +8,38 @@ type BridgeWithdrawalTransaction @entity {
   from: Bytes
   to: Bytes
   transactionIndex: BigInt
-  transactionIndexEvent: BigInt
-  transactionIndexCallData: BigInt
 
   exitNum: Int
   amount: BigInt
   l1Token: Bytes
-  datas: Bytes
-  input: Bytes
+}
 
-  first: Bytes
-  second: Int
-  third: Bytes
+type BridgeDepositTransaction @entity {
+  id: ID!
+  blockNumber: Int
+  timestamp: Int
+  signer: Bytes
 
-  extra: Bytes
+  txHash: Bytes
+  from: Bytes
+  to: Bytes
+  retryableTicketId: String
+
+  sequenceNumber: Int
+  amount: BigInt
+  l1Token: Bytes
+
+  # l2ChainId: Bytes
+  # fromAddress: Bytes
+  # messageNumber: Bytes
+  # l1BaseFee: Bytes
+  # destAddress: Bytes
+  # l2CallValue: Bytes
+  # l1Value: Bytes
+  # maxSubmissionFee: Bytes
+  # excessFeeRefundAddress: Bytes
+  # callValueRefundAddress: Bytes
+  # gasLimit: Bytes
+  # maxFeePerGas: Bytes
+  # data: Bytes
 }

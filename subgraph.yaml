@@ -47,4 +47,7 @@ dataSources:
         - event: WithdrawalFinalized(address,indexed address,indexed address,indexed uint256,uint256)
           handler: handleWithdrawalFinalized
           receipt: true
+        - event: DepositInitiated(address,indexed address,indexed address,indexed uint256,uint256)
+          handler: handleDepositInitiated
+          receipt: true
       file: ./src/l1Gateway.ts

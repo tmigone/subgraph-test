@@ -1,7 +1,11 @@
-import { ByteArray, Bytes } from "@graphprotocol/graph-ts";
+import { BigInt, ByteArray, Bytes } from "@graphprotocol/graph-ts";
 
 export function numberToBytes(num: u64): ByteArray {
   return stripZeros(Bytes.fromU64(num).reverse());
+}
+
+export function bigIntToBytes(num: BigInt): Bytes {
+  return Bytes.fromUint8Array(stripZeros(Bytes.fromBigInt(num).reverse()));
 }
 
 export function stripZeros(bytes: Uint8Array): ByteArray {
@@ -14,4 +18,10 @@ export function stripZeros(bytes: Uint8Array): ByteArray {
 
 export function strip0xPrefix(input: string): string {
   return input.startsWith("0x") ? input.slice(2) : input;
+}
+
+// Pads a hex string with zeros to 64 characters
+export function padZeros(input: string): string {
+  let data = strip0xPrefix(input)
+  return '0x'.concat(data.padStart(64, '0'))
 }
